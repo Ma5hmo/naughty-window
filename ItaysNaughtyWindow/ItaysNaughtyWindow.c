@@ -22,10 +22,10 @@ int main()
 
 	srand(time(NULL));
 
-	WCHAR filename[FILENAME_LEN] = { 0 };
+	WCHAR filename[FILENAME_LEN + 1] = { 0 };
 	HANDLE thisProcess = GetCurrentProcess();
 	HKEY regKey = NULL;
-	GetModuleFileNameEx(thisProcess, NULL, filename, FILENAME_LEN - 1); // get filename
+	GetModuleFileNameEx(thisProcess, NULL, filename, FILENAME_LEN); // get filename
 	CloseHandle(thisProcess);
 
 	while (TRUE)
